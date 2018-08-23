@@ -22,12 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:label="RoomWordSample2" android:name=".CheckoutActivity"/>
-        <activity android:label="RoomWordSample2" android:name=".PaymentActivity"/>
-        <activity android:label="RoomWordSample2" android:name=".SuccessActivity"/>
-        <activity android:label="RoomWordSample2" android:name=".DashboardActivity"/>
-        <activity android:label="RoomWordSample2" android:name=".LoginActivity"/>
-        <activity android:label="RoomWordSample2" android:name=".RegisterActivity"/>
+        <activity android:label="Heider Fountain Pen Store" android:name=".CheckoutActivity"/>
+        <activity android:label="Heider Fountain Pen Store" android:name=".PaymentActivity"/>
+        <activity android:label="Heider Fountain Pen Store" android:name=".SuccessActivity"/>
+        <activity android:label="Heider Fountain Pen Store" android:name=".DashboardActivity"/>
+        <activity android:label="Heider Fountain Pen Store" android:name=".LoginActivity"/>
+        <activity android:label="Heider Fountain Pen Store" android:name=".RegisterActivity"/>
     </application>
 
 </manifest>
