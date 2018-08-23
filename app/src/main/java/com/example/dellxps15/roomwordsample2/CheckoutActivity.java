@@ -94,6 +94,8 @@ public class CheckoutActivity extends AppCompatActivity {
             for(int i =0; i < count; i++){
                 int idName = prefs.getInt("idName"+(i+1), 0);
 
+                System.out.println("RAIIIIIIIIIIIIIIITAHHHH: " + idName);
+
                 if(idName < 0){
                     continue;
                 }
@@ -173,6 +175,17 @@ public class CheckoutActivity extends AppCompatActivity {
                 }
             }
         });
+
+        final ProductListAdapter adapter = new ProductListAdapter(this);
+        mWordViewModel = ViewModelProviders.of(this).get(ProductViewModel.class);
+        mWordViewModel.getAllProducts().observe(this, new Observer<List<Products>>() {
+            @Override
+            public void onChanged(@Nullable final List<Products> products) {
+                // Update the cached copy of the words in the adapter.
+                adapter.setProducts(products);
+                checkProd();
+            }
+        });
     }
 
 
@@ -180,6 +193,87 @@ public class CheckoutActivity extends AppCompatActivity {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//
+//        context = CheckoutActivity.this;
+//        // CHECK FOR NEW ITEMS
+//        // DELETE ITEM IN SHARED PREF
+//        if(isNetworkAvailable()){
+//            checkProd();
+//        }
+//        Toast.makeText(getApplicationContext(),
+//                "onstart!", Toast.LENGTH_SHORT).show();
+//
+//        final ProductListAdapter adapter = new ProductListAdapter(this);
+//        mWordViewModel = ViewModelProviders.of(this).get(ProductViewModel.class);
+//        mWordViewModel.getAllProducts().observe(this, new Observer<List<Products>>() {
+//            @Override
+//            public void onChanged(@Nullable final List<Products> products) {
+//                // Update the cached copy of the words in the adapter.
+//                adapter.setProducts(products);
+//                checkProd();
+//            }
+//        });
+//    }
+//
+//    @Override
+//    protected void onRestart() {
+//        super.onRestart();
+//
+//        context = CheckoutActivity.this;
+//        // CHECK FOR NEW ITEMS
+//        // DELETE ITEM IN SHARED PREF
+//        if(isNetworkAvailable()){
+//            checkProd();
+//        }
+//
+//        Toast.makeText(getApplicationContext(),
+//                "onrestart!", Toast.LENGTH_SHORT).show();
+//
+//        final ProductListAdapter adapter = new ProductListAdapter(this);
+//        mWordViewModel = ViewModelProviders.of(this).get(ProductViewModel.class);
+//        mWordViewModel.getAllProducts().observe(this, new Observer<List<Products>>() {
+//            @Override
+//            public void onChanged(@Nullable final List<Products> products) {
+//                // Update the cached copy of the words in the adapter.
+//                adapter.setProducts(products);
+//                checkProd();
+//            }
+//        });
+//    }
+//
+//    /* (non-Javadoc)
+//     * @see android.app.Activity#onResume()
+//     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        context = CheckoutActivity.this;
+        // CHECK FOR NEW ITEMS
+        // DELETE ITEM IN SHARED PREF
+        if(isNetworkAvailable()){
+            checkProd();
+        }
+
+        Toast.makeText(getApplicationContext(),
+                "onresume!", Toast.LENGTH_SHORT).show();
+
+        final ProductListAdapter adapter = new ProductListAdapter(this);
+        mWordViewModel = ViewModelProviders.of(this).get(ProductViewModel.class);
+        mWordViewModel.getAllProducts().observe(this, new Observer<List<Products>>() {
+            @Override
+            public void onChanged(@Nullable final List<Products> products) {
+                // Update the cached copy of the words in the adapter.
+                adapter.setProducts(products);
+                checkProd();
+            }
+        });
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -270,6 +364,9 @@ public class CheckoutActivity extends AppCompatActivity {
                             //Check if user got logged in successfully
 
                             if (true) {
+
+                                Toast.makeText(getApplicationContext(),
+                                        "WE ARE INSIDSE!", Toast.LENGTH_SHORT).show();
 
 
                                 JSONObject obj = new JSONObject(response.toString());

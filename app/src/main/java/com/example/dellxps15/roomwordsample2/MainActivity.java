@@ -37,6 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static java.security.AccessController.getContext;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ProductViewModel mWordViewModel;
     public static String SHARED_PREFS_FILE_NAME = "fontana_shared_prefs";
+    Context context;
     private static final String TAG = "MainActivity";
 
     private static final String KEY_STATUS = "status";
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //getSupportActionBar().setTitle("Heider Fountain Pen Store");
-
+        context = MainActivity.this;
 
         // IF THERE IS INTERNET CALL getProd() else do nothing
 
@@ -120,11 +122,197 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(@Nullable final List<Products> products) {
                 // Update the cached copy of the words in the adapter.
                 adapter.setProducts(products);
+                checkProd();
             }
         });
 
+//        Intent intent = getIntent();
+//
+//        if(intent.hasExtra("GOTOEXTRA")){
+//            String extra = intent.getStringExtra("GOTOEXTRA");
+//            if(extra.equals("CART")){
+//                Toast.makeText(getApplicationContext(),
+//                        "GOTO CART", Toast.LENGTH_SHORT).show();
+//
+//                Intent myIntent = new Intent(MainActivity.this, CheckoutActivity.class);
+//                MainActivity.this.startActivity(myIntent);
+//            }
+//
+//        }else{
+//            // Do something else
+//        }
 
 
+    }
+
+    // *********************************************************************
+
+    private void checkProd() {
+
+        JSONObject request = new JSONObject();
+        try {
+            //Populate the request parameters
+            request.put(KEY_USERNAME, "username");
+            request.put(KEY_PASSWORD, "password");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest jsArrayRequest = new JsonObjectRequest
+                (Request.Method.POST, products_url, request, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        try {
+                            //Check if user got logged in successfully
+
+                            if (true) {
+
+                                Toast.makeText(getApplicationContext(),
+                                        "WE ARE INSIDSE!", Toast.LENGTH_SHORT).show();
+
+
+                                JSONObject obj = new JSONObject(response.toString());
+                                int len = obj.length();
+                                int[] myIntArray = new int[len];
+
+                                for(int i = 0; i < len; i++){
+                                    JSONObject prod = obj.getJSONObject(Integer.toString(i));
+                                    Products x = new Products(Integer.parseInt(prod.getString("id")), prod.getString("product"), prod.getString("description"), Integer.parseInt(prod.getString("price")), prod.getString("image"));
+
+                                    // find id and check if it exists in sharedprefs
+                                    // warning: except empty cart
+
+                                    myIntArray[i] = Integer.parseInt(prod.getString("id"));
+
+                                }
+
+                                // pick each position / idName from sharedprefs and check through myIntArray
+                                SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_FILE_NAME, MODE_PRIVATE);
+                                int count = prefs.getInt("count", 0);
+
+                                // check if idName exists in myIntArray
+                                // if true OK
+                                // if not delete shared pref input
+
+
+                                for(int i =0; i< count; i++){
+                                    int idNamex = prefs.getInt("idName"+(i+1), -1);
+
+                                    if(idNamex < 0){
+                                        continue;
+                                    }
+
+                                    boolean contains = Arrays.asList(myIntArray).contains(idNamex);
+                                    boolean cont = false;
+
+                                    for(int y = 0; y < myIntArray.length; y++){
+                                        if(myIntArray[y] == idNamex){
+                                            cont = true;
+                                        }
+                                    }
+
+                                    if(cont){
+                                        SharedPreferences.Editor editor = getSharedPreferences(SHARED_PREFS_FILE_NAME, MODE_PRIVATE).edit();
+                                        editor.putInt("count", (i+1));
+                                        editor.putInt("idName"+(i+1), idNamex);
+                                        editor.apply();
+                                    } else {
+                                        // remove item from pr
+                                        SharedPreferences.Editor editor = getSharedPreferences(SHARED_PREFS_FILE_NAME, MODE_PRIVATE).edit();
+                                        editor.putInt("count", (i+1));
+                                        editor.putInt("idName"+(i+1), -2);
+                                        editor.apply();
+                                    }
+                                }
+
+
+
+                            }else{
+                                Toast.makeText(getApplicationContext(),
+                                        response.getString(KEY_MESSAGE), Toast.LENGTH_SHORT).show();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+
+                        //Display error message whenever an error occurs
+                        Toast.makeText(getApplicationContext(),
+                                error.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+        // Access the RequestQueue through your singleton class.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        MySingleton.getInstance(this).addToRequestQueue(jsArrayRequest);
+    }
+
+    // *********************************************************************
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//
+//        context = MainActivity.this;
+//        // CHECK FOR NEW ITEMS
+//        // DELETE ITEM IN SHARED PREF
+//        if(isNetworkAvailable()){
+//            checkProd();
+//        }
+//        Toast.makeText(getApplicationContext(),
+//                "onstart!", Toast.LENGTH_SHORT).show();
+//    }
+//
+//    @Override
+//    protected void onRestart() {
+//        super.onRestart();
+//
+//        context = MainActivity.this;
+//        // CHECK FOR NEW ITEMS
+//        // DELETE ITEM IN SHARED PREF
+//        if(isNetworkAvailable()){
+//            checkProd();
+//        }
+//
+//        Toast.makeText(getApplicationContext(),
+//                "onrestart!", Toast.LENGTH_SHORT).show();
+//    }
+//
+//    /* (non-Javadoc)
+//     * @see android.app.Activity#onResume()
+//     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        context = MainActivity.this;
+        // CHECK FOR NEW ITEMS
+        // DELETE ITEM IN SHARED PREF
+        if(isNetworkAvailable()){
+            checkProd();
+        }
+
+        Toast.makeText(getApplicationContext(),
+                "onresume!", Toast.LENGTH_SHORT).show();
+
+        final ProductListAdapter adapter = new ProductListAdapter(this);
+        mWordViewModel = ViewModelProviders.of(this).get(ProductViewModel.class);
+        mWordViewModel.getAllProducts().observe(this, new Observer<List<Products>>() {
+            @Override
+            public void onChanged(@Nullable final List<Products> products) {
+                // Update the cached copy of the words in the adapter.
+                adapter.setProducts(products);
+                checkProd();
+            }
+        });
     }
 
     private void getProd() {
@@ -147,7 +335,6 @@ public class MainActivity extends AppCompatActivity {
                             //Check if user got logged in successfully
 
                             if (true) {
-
                                 // CALL DELETEALL() HERE
 
                                 oldPop();
@@ -242,6 +429,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checkout(View view){
+//        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+//        intent.putExtra("GOTOEXTRA", "CART");
+//        startActivity(intent);
+
         Intent myIntent = new Intent(MainActivity.this, CheckoutActivity.class);
         MainActivity.this.startActivity(myIntent);
 
