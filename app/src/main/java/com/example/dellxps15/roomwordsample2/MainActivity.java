@@ -134,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
 //                Toast.makeText(getApplicationContext(),
 //                        "GOTO CART", Toast.LENGTH_SHORT).show();
 //
+//                getProd();
+//
 //                Intent myIntent = new Intent(MainActivity.this, CheckoutActivity.class);
 //                MainActivity.this.startActivity(myIntent);
 //            }
@@ -168,8 +170,8 @@ public class MainActivity extends AppCompatActivity {
 
                             if (true) {
 
-                                Toast.makeText(getApplicationContext(),
-                                        "WE ARE INSIDSE!", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getApplicationContext(),
+//                                        "WE ARE INSIDSE!", Toast.LENGTH_SHORT).show();
 
 
                                 JSONObject obj = new JSONObject(response.toString());
