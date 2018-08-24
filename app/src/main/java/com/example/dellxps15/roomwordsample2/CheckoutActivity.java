@@ -54,7 +54,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class CheckoutActivity extends AppCompatActivity {
 
     public static String SHARED_PREFS_FILE_NAME = "fontana_shared_prefs";
-    Context context;
+    Context context = CheckoutActivity.this;
     private ProductViewModel mWordViewModel;
     int totalPrice;
     private SessionHandler session;
@@ -73,7 +73,7 @@ public class CheckoutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_checkout);
         session = new SessionHandler(getApplicationContext());
 
-        context = CheckoutActivity.this;
+
         String name="xxx";
 
         // CHECK FOR NEW ITEMS
@@ -243,6 +243,25 @@ public class CheckoutActivity extends AppCompatActivity {
 //                checkProd();
 //            }
 //        });
+//
+//        Intent intent = getIntent();
+//
+//        if(intent.hasExtra("GOTOEXTRA")){
+//            String extra = intent.getStringExtra("GOTOEXTRA");
+//            if(extra.equals("CART")){
+//                Toast.makeText(getApplicationContext(),
+//                        "WE SHOULD DO SOMETHING", Toast.LENGTH_SHORT).show();
+//
+//                checkProd();
+//
+//                Intent myIntent = new Intent(CheckoutActivity.this, CheckoutActivity.class);
+//                CheckoutActivity.this.startActivity(myIntent);
+//                finish();
+//            }
+//
+//        }else{
+//            // Do something else
+//        }
 //    }
 //
 //    /* (non-Javadoc)
@@ -252,10 +271,11 @@ public class CheckoutActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        context = CheckoutActivity.this;
+
         // CHECK FOR NEW ITEMS
         // DELETE ITEM IN SHARED PREF
         if(isNetworkAvailable()){
+            context = CheckoutActivity.this;
             checkProd();
         }
 
@@ -272,6 +292,25 @@ public class CheckoutActivity extends AppCompatActivity {
                 checkProd();
             }
         });
+
+        Intent intent = getIntent();
+
+        if(intent.hasExtra("GOTOEXTRA")){
+            String extra = intent.getStringExtra("GOTOEXTRA");
+            if(extra.equals("CART")){
+                Toast.makeText(getApplicationContext(),
+                        "WE SHOULD DO SOMETHING", Toast.LENGTH_SHORT).show();
+
+                checkProd();
+
+                Intent myIntent = new Intent(CheckoutActivity.this, CheckoutActivity.class);
+                CheckoutActivity.this.startActivity(myIntent);
+                finish();
+            }
+
+        }else{
+            // Do something else
+        }
     }
 
 

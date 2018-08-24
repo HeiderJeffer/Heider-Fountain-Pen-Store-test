@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ProductViewModel mWordViewModel;
     public static String SHARED_PREFS_FILE_NAME = "fontana_shared_prefs";
-    Context context;
+    Context context = MainActivity.this;
     private static final String TAG = "MainActivity";
 
     private static final String KEY_STATUS = "status";
@@ -65,12 +65,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //getSupportActionBar().setTitle("Heider Fountain Pen Store");
-        context = MainActivity.this;
+
 
         // IF THERE IS INTERNET CALL getProd() else do nothing
 
         if(isNetworkAvailable()){
             getProd();
+            checkProd();
             updateCartList();
         }
 
@@ -436,6 +437,7 @@ public class MainActivity extends AppCompatActivity {
 //        startActivity(intent);
 
         Intent myIntent = new Intent(MainActivity.this, CheckoutActivity.class);
+        myIntent.putExtra("GOTOEXTRA", "CART");
         MainActivity.this.startActivity(myIntent);
 
     }
