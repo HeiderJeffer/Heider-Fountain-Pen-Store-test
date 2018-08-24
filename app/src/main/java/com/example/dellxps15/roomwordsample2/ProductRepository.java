@@ -29,6 +29,22 @@ public class ProductRepository {
         } return iAllProducts;
     }
 
+    public void deleteOne(int id){ new deleteOneAsyncTask(mProductDao).execute(id); }
+
+    private static class deleteOneAsyncTask extends AsyncTask<Integer, Void, Void> {
+
+        private ProductDao mAsyncTaskDao;
+        deleteOneAsyncTask(ProductDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Integer... id) {
+            mAsyncTaskDao.deleteOne(id[0]);
+            return null;
+        }
+    }
+
     public void delAll(Products product) { new deleteAsyncTask(mProductDao).execute(product); }
 
     private static class deleteAsyncTask extends AsyncTask<Products, Void, Void> {

@@ -2,6 +2,7 @@ package com.example.dellxps15.roomwordsample2;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -127,24 +128,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        Intent intent = getIntent();
-//
-//        if(intent.hasExtra("GOTOEXTRA")){
-//            String extra = intent.getStringExtra("GOTOEXTRA");
-//            if(extra.equals("CART")){
-//                Toast.makeText(getApplicationContext(),
-//                        "GOTO CART", Toast.LENGTH_SHORT).show();
-//
-//                getProd();
-//
-//                Intent myIntent = new Intent(MainActivity.this, CheckoutActivity.class);
-//                MainActivity.this.startActivity(myIntent);
-//            }
-//
-//        }else{
-//            // Do something else
-//        }
-
 
     }
 
@@ -222,6 +205,9 @@ public class MainActivity extends AppCompatActivity {
                                         editor.apply();
                                     } else {
                                         // remove item from pr
+                                        Toast.makeText(getApplicationContext(),
+                                                "ITEM WITH PRODUCT ID:" + idNamex +" WAS REMOVED AUTOMATICALLY FROM YOUR CART BECAUSE IT JUST WENT OUT OF STOCK OR WAS REMOVED THE ONLINE STORE.", Toast.LENGTH_SHORT).show();
+
                                         SharedPreferences.Editor editor = getSharedPreferences(SHARED_PREFS_FILE_NAME, MODE_PRIVATE).edit();
                                         editor.putInt("count", (i+1));
                                         editor.putInt("idName"+(i+1), -2);
@@ -258,40 +244,7 @@ public class MainActivity extends AppCompatActivity {
         MySingleton.getInstance(this).addToRequestQueue(jsArrayRequest);
     }
 
-    // *********************************************************************
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//
-//        context = MainActivity.this;
-//        // CHECK FOR NEW ITEMS
-//        // DELETE ITEM IN SHARED PREF
-//        if(isNetworkAvailable()){
-//            checkProd();
-//        }
-//        Toast.makeText(getApplicationContext(),
-//                "onstart!", Toast.LENGTH_SHORT).show();
-//    }
-//
-//    @Override
-//    protected void onRestart() {
-//        super.onRestart();
-//
-//        context = MainActivity.this;
-//        // CHECK FOR NEW ITEMS
-//        // DELETE ITEM IN SHARED PREF
-//        if(isNetworkAvailable()){
-//            checkProd();
-//        }
-//
-//        Toast.makeText(getApplicationContext(),
-//                "onrestart!", Toast.LENGTH_SHORT).show();
-//    }
-//
-//    /* (non-Javadoc)
-//     * @see android.app.Activity#onResume()
-//     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -338,12 +291,26 @@ public class MainActivity extends AppCompatActivity {
                             //Check if user got logged in successfully
 
                             if (true) {
-                                // CALL DELETEALL() HERE
-
-                                oldPop();
 
                                 JSONObject obj = new JSONObject(response.toString());
                                 int len = obj.length();
+
+//                                for(int i = 0; i < len; i++){
+//                                    JSONObject prod = obj.getJSONObject(Integer.toString(i));
+//                                    Products x = new Products(Integer.parseInt(prod.getString("id")), prod.getString("product"), prod.getString("description"), Integer.parseInt(prod.getString("price")), prod.getString("image"));
+//
+//                                    //check if this product already exists in room database
+//                                    //then delete that
+//
+//                                    int cid = Integer.parseInt(prod.getString("id"));
+//                                    deleteOne(cid);
+//                                }
+//
+//                                //whichever product is leftover is deleted
+//                                checkPop();
+
+                                // CALL DELETEALL() HERE
+                                oldPop();
 
                                 for(int i = 0; i < len; i++){
                                     JSONObject prod = obj.getJSONObject(Integer.toString(i));
@@ -381,18 +348,46 @@ public class MainActivity extends AppCompatActivity {
         MySingleton.getInstance(this).addToRequestQueue(jsArrayRequest);
     }
 
-    public void newPop(Products p){
+    public boolean newPop(Products p){
 
         ProductViewModel c = new ProductViewModel(this.getApplication());
         c.insert(p);
+        return true;
     }
 
-    public void oldPop(){
+    public boolean oldPop(){
 
         ProductViewModel c = new ProductViewModel(this.getApplication());
         Products x = new Products(0,"CHECK1", "Gold-tip Mont Blanc (Black and Gold) Made in Switzerland", 678, "a1");
 
         c.delAll(x);
+        return true;
+    }
+
+    public void deleteOne(int id){
+        ProductViewModel c = new ProductViewModel(this.getApplication());
+        Products x = new Products(0,"CHECK1", "Gold-tip Mont Blanc (Black and Gold) Made in Switzerland", 678, "a1");
+
+        c.deleteOne(id);
+    }
+
+    public void checkPop(){
+        ProductViewModel c = new ProductViewModel(this.getApplication());
+
+         List<Products> products = c.getAllProducts().getValue();
+
+         if(products != null){
+             Toast.makeText(getApplicationContext(),
+                     "SOMETHING REMOVED/DELETED", Toast.LENGTH_SHORT).show();
+         } else {
+             Toast.makeText(getApplicationContext(),
+                     "NO ITEMS WERE DELETED", Toast.LENGTH_SHORT).show();
+         }
+    }
+
+    public static double getRandomDoubleBetweenRange(double min, double max){
+        double x = (Math.random()*((max-min)+1))+min;
+        return x;
     }
 
     private boolean isNetworkAvailable() {

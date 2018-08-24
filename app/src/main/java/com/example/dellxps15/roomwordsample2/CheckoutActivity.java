@@ -298,8 +298,8 @@ public class CheckoutActivity extends AppCompatActivity {
         if(intent.hasExtra("GOTOEXTRA")){
             String extra = intent.getStringExtra("GOTOEXTRA");
             if(extra.equals("CART")){
-                Toast.makeText(getApplicationContext(),
-                        "WE SHOULD DO SOMETHING", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(),
+//                        "WE SHOULD DO SOMETHING", Toast.LENGTH_SHORT).show();
 
                 checkProd();
 

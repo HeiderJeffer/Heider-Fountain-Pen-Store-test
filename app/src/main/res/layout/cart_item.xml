@@ -10,13 +10,13 @@
     android:paddingBottom="10dp"
     android:layout_marginBottom="10dp"
     android:layout_marginTop="30dp"
-    android:background="#f5f5f5">
+    android:background="#f2cd96">
 
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:background="#ffdd00"
+        android:background="#fc8865"
          />
 
     <TextView
@@ -36,7 +36,7 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="130dp"
-        android:background="#ffdd00"
+        android:background="#c18d5c"
         android:gravity="center"
         android:padding="5dp"
         android:paddingLeft="10dp"
