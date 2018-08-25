@@ -1,6 +1,7 @@
-# RoomWordSample2
+# Heider Fountain Pen Store
 Android project
-Android Project - Fountain Pens store
+Android Project - Heider Fountain Pens store
+
 Features:
 
 - online and offline catalog/order [DONE]
