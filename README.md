@@ -1,5 +1,5 @@
 # Heider Fountain Pen Store
-Android project
+
 Android Project - Heider Fountain Pens store
 
 Features:
