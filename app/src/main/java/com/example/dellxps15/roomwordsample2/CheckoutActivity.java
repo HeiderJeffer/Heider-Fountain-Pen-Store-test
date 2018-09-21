@@ -3,8 +3,11 @@ package com.example.dellxps15.roomwordsample2;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -45,6 +48,8 @@ import com.stripe.android.view.CardInputWidget;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -106,11 +111,37 @@ public class CheckoutActivity extends AppCompatActivity {
                 LayoutInflater inflater = getLayoutInflater();
                 View view = inflater.inflate(R.layout.cart_item, null);
 
+
+                ////////////////////// - - - ////////////////////
+
                 String imgName = p.getImage();
                 int resID = context.getResources().getIdentifier(imgName , "drawable", context.getPackageName());
 
                 ImageView imageItemView = (ImageView) view.findViewById(R.id.imageView4);
                 imageItemView.setImageResource(resID);
+
+
+//                String imgName = p.getImage();
+//                int lin = imgName.lastIndexOf("/");
+//                String justImgName = imgName.substring(lin+1);
+//
+//                ContextWrapper wrapper = new ContextWrapper(context);
+//                File file = wrapper.getDir("Images",MODE_PRIVATE);
+//                file = new File(file, justImgName);
+//
+//                try {
+//
+//                    Bitmap b = BitmapFactory.decodeStream(new FileInputStream(file));
+//                    //ma.showToast(context, justImgName);
+//                    ImageView imageItemView = (ImageView) view.findViewById(R.id.imageView4);
+//                    imageItemView.setImageBitmap(b);
+//                }
+//                catch (Exception e){
+//                    e.printStackTrace();
+//                }
+
+                ///////////////////// - - - ///////////////////
+
                 TextView textView4 = (TextView) view.findViewById(R.id.textView4);
                 textView4.setText(p.getProduct());
                 TextView textView5 = (TextView) view.findViewById(R.id.textView5);

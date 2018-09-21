@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_settings2"
         android:orderInCategory="100"
-        android:title="Home"
+        android:title="Home Sync"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_settings"

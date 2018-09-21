@@ -16,7 +16,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginRight="10dp"
         android:textAlignment="viewEnd"
-        android:text="Please Login/register to continue payment." />
+        android:text="Please Login/register to continue the payment." />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"

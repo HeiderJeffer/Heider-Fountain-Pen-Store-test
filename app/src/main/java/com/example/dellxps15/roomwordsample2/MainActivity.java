@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         // IF THERE IS INTERNET CALL getProd() else do nothing
-
         if(isNetworkAvailable()){
             getProd();
             checkProd();
@@ -131,6 +130,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void showToast(Context context, String message){
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
     // *********************************************************************
 
     private void checkProd() {
@@ -390,7 +392,7 @@ public class MainActivity extends AppCompatActivity {
         return x;
     }
 
-    private boolean isNetworkAvailable() {
+    public boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
